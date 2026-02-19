@@ -255,11 +255,16 @@ export class ZyeuteContentService {
 
     // Inject affiliate links for matching keywords
     for (const { keyword, url } of payload.affiliateLinks) {
-      const regex = new RegExp(`\\b${keyword}\\b`, 'gi');
+      // Escape special regex characters in keyword
+      const escapedKeyword = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp(`\\b${escapedKeyword}\\b`, 'gi');
       if (regex.test(modifiedContent)) {
+        // HTML escape the URL and keyword to prevent XSS
+        const safeUrl = this.htmlEscape(url);
+        const safeKeyword = this.htmlEscape(keyword);
         modifiedContent = modifiedContent.replace(
           regex,
-          `<a href="${url}" rel="nofollow sponsored">${keyword}</a>`
+          `<a href="${safeUrl}" rel="nofollow sponsored">${safeKeyword}</a>`
         );
         injectedCount++;
       }
@@ -272,6 +277,20 @@ export class ZyeuteContentService {
       linksInjected: injectedCount,
       timestamp: Date.now()
     };
+  }
+
+  /**
+   * HTML escape utility to prevent XSS
+   */
+  private htmlEscape(text: string): string {
+    const map: Record<string, string> = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#039;'
+    };
+    return text.replace(/[&<>"']/g, (char) => map[char]);
   }
 
   /**

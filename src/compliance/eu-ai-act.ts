@@ -118,6 +118,16 @@ export class EUAIActMonitor {
       throw new Error('Oversight item not found');
     }
 
+    // Get user_id from the task
+    const task = await this.db
+      .prepare('SELECT user_id FROM tasks WHERE id = ?')
+      .bind(result.task_id)
+      .first<{ user_id: string }>();
+
+    if (!task) {
+      throw new Error('Task not found');
+    }
+
     // Update oversight queue
     await this.db
       .prepare(
@@ -134,9 +144,9 @@ export class EUAIActMonitor {
       )
       .run();
 
-    // Log human review action
+    // Log human review action with correct user_id
     await this.auditLogger.logHumanReview(
-      result.task_id,
+      task.user_id,
       result.task_id,
       result.service,
       reviewerId,

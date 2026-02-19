@@ -95,7 +95,8 @@ export async function retryWithBackoff<T>(
         config.initialDelayMs * Math.pow(config.factor, attempt),
         config.maxDelayMs
       );
-      const jitter = Math.random() * 0.3 * baseDelay; // ±30% jitter
+      // Add random jitter (0% to +30% of base delay)
+      const jitter = Math.random() * 0.3 * baseDelay;
       const delay = baseDelay + jitter;
 
       await sleep(delay);

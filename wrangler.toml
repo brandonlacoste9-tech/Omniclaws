@@ -4,6 +4,9 @@ compatibility_date = "2024-01-01"
 compatibility_flags = ["nodejs_compat"]
 
 # D1 Database for task queues and user management
+# IMPORTANT: Replace 'your-database-id-here' with your actual database ID
+# Run: wrangler d1 create omniclaws_db
+# Then update the database_id below with the ID from the output
 [[d1_databases]]
 binding = "DB"
 database_name = "omniclaws_db"
