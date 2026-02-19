@@ -1,0 +1,26 @@
+name = "omniclaws"
+main = "src/index.ts"
+compatibility_date = "2024-02-19"
+compatibility_flags = ["nodejs_compat"]
+
+# Environment variables (configure via wrangler secret put)
+# PADDLE_API_KEY
+# STRIPE_SECRET_KEY
+# R2_ACCESS_KEY_ID
+# R2_SECRET_ACCESS_KEY
+
+[[d1_databases]]
+binding = "DB"
+database_name = "omniclaws-db"
+database_id = "your-database-id-here"
+
+[[r2_buckets]]
+binding = "AUDIT_LOGS"
+bucket_name = "omniclaws-audit-logs"
+
+[[r2_buckets]]
+binding = "COMPLIANCE_DATA"
+bucket_name = "omniclaws-compliance"
+
+[triggers]
+crons = ["*/5 * * * *"]  # Run every 5 minutes for failed task reprocessing
