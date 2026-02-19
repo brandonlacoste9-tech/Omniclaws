@@ -1,0 +1,21 @@
+{
+  "name": "omniclaws",
+  "version": "1.0.0",
+  "description": "Global edge-based AI monetization platform",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:migrate": "wrangler d1 migrations apply omniclaws-db --remote",
+    "db:migrate:local": "wrangler d1 migrations apply omniclaws-db --local",
+    "db:create": "wrangler d1 create omniclaws-db"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240208.0",
+    "typescript": "^5.3.3",
+    "wrangler": "^3.91.0"
+  },
+  "dependencies": {
+    "stripe": "^14.21.0"
+  }
+}

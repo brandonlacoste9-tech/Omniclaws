@@ -1,0 +1,36 @@
+# Omniclaws - Global Edge AI Monetization Platform
+# Runs in 200+ Cloudflare edge locations
+
+name = "omniclaws"
+main = "src/index.ts"
+compatibility_date = "2024-02-19"
+
+# Environment variables - set via: wrangler secret put <NAME>
+# Required: PADDLE_API_KEY, STRIPE_SECRET_KEY, OPENCLAW_API_KEY
+[vars]
+TASK_PRICE_CENTS = "50"
+TASK_PRICE_TIER_BASIC = "50"
+TASK_PRICE_TIER_STANDARD = "100"
+TASK_PRICE_TIER_COMPLEX = "200"
+MAX_RETRIES = "3"
+CONFIDENCE_THRESHOLD = "0.95"
+
+# D1 Database - task queues, user data, failed tasks
+# Create with: wrangler d1 create omniclaws-db
+[[d1_databases]]
+binding = "DB"
+database_name = "omniclaws-db"
+database_id = "a4158023-3785-49e8-8e39-0c835c445f79"
+
+# R2 Storage - immutable audit logs for compliance
+[[r2_buckets]]
+binding = "AUDIT_BUCKET"
+bucket_name = "omniclaws-audit-logs"
+
+# Run close to users, reduce latency
+[placement]
+mode = "smart"
+
+# Cron: failed tasks every 5 min, Zyeuté every hour, monitoring every 2 min, whale scan every 1 min
+[triggers]
+crons = ["*/5 * * * *", "0 * * * *", "*/2 * * * *", "* * * * *"]
