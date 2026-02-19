@@ -154,7 +154,7 @@ export class PaddleProvider implements PaymentProvider {
    */
   async handleWebhook(request: Request): Promise<Response> {
     try {
-      const payload = await request.json();
+      const payload = await request.json() as { event_type: string; data: { id: string } };
       
       // Verify webhook signature (implement based on Paddle's webhook verification)
       // const signature = request.headers.get('paddle-signature');

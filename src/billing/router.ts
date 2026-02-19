@@ -2,7 +2,7 @@
 import type { Env, PaymentProvider, User } from '../types';
 import { PaddleProvider } from './paddle';
 import { StripeProvider } from './stripe';
-import { determineRegion, getPaymentProvider } from '../utils/geo-router';
+import { getPaymentProvider } from '../utils/geo-router';
 
 /**
  * Smart geo-router that directs traffic to appropriate payment provider
@@ -34,8 +34,7 @@ export class BillingRouter {
   async processPayment(
     userId: string,
     amount: number,
-    currency: string,
-    request: Request
+    currency: string
   ): Promise<Response> {
     try {
       // Get user to determine region
@@ -117,8 +116,7 @@ export class BillingRouter {
    */
   async createSubscription(
     userId: string,
-    tier: string,
-    request: Request
+    tier: string
   ): Promise<Response> {
     try {
       // Get user to determine region

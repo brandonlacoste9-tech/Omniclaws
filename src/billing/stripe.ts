@@ -193,7 +193,7 @@ export class StripeProvider implements PaymentProvider {
    */
   async handleWebhook(request: Request): Promise<Response> {
     try {
-      const payload = await request.json();
+      const payload = await request.json() as { type: string; data: { object: { id: string } } };
       
       // Verify webhook signature (implement based on Stripe's webhook verification)
       // const signature = request.headers.get('stripe-signature');

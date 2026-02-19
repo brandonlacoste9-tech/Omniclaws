@@ -1,5 +1,5 @@
 // Main router for Omniclaws Platform - Cloudflare Workers entry point
-import type { Env, User, GeoLocation } from './types';
+import type { Env, GeoLocation } from './types';
 import { BillingRouter } from './billing/router';
 import { OpenClawAPI } from './services/openclaw-api';
 import { QEmploisService } from './services/q-emplois';
@@ -13,7 +13,7 @@ import { AuditLogger } from './compliance/audit-logger';
  * Handles routing, caching, and CORS
  */
 export default {
-  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+  async fetch(request: Request, env: Env): Promise<Response> {
     try {
       // CORS headers
       const corsHeaders = {
@@ -38,7 +38,6 @@ export default {
       const openClawAPI = new OpenClawAPI(env);
       const qEmplois = new QEmploisService(env);
       const zyeute = new ZyeuteContentService(env);
-      const auditLogger = new AuditLogger(env.AUDIT_LOGS);
 
       // Get geo-location from Cloudflare headers
       const geoLocation: GeoLocation = {
@@ -120,11 +119,11 @@ export default {
       // Billing routes
       else if (path === '/api/billing/payment' && request.method === 'POST') {
         const { userId, amount, currency } = await request.json() as { userId: string; amount: number; currency: string };
-        response = await billingRouter.processPayment(userId, amount, currency, request);
+        response = await billingRouter.processPayment(userId, amount, currency);
       }
       else if (path === '/api/billing/subscription' && request.method === 'POST') {
         const { userId, tier } = await request.json() as { userId: string; tier: string };
-        response = await billingRouter.createSubscription(userId, tier, request);
+        response = await billingRouter.createSubscription(userId, tier);
       }
       else if (path.startsWith('/api/billing/webhook/')) {
         response = await billingRouter.handleWebhook(request);
@@ -168,7 +167,7 @@ export default {
    * Scheduled handler for cron-based task reprocessing
    * Runs every 5 minutes to retry failed tasks
    */
-  async scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionContext): Promise<void> {
+  async scheduled(event: ScheduledEvent, env: Env): Promise<void> {
     try {
       console.log('Cron triggered:', new Date(event.scheduledTime).toISOString());
 

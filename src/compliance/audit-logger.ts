@@ -1,5 +1,5 @@
 // Immutable audit logger to R2 storage for EU AI Act conformity assessments
-import type { Env, AuditLogEntry } from '../types';
+import type { AuditLogEntry } from '../types';
 
 /**
  * Audit logger that writes immutable logs to R2 bucket
@@ -141,7 +141,7 @@ export class AuditLogger {
   /**
    * Query audit logs by date range (for compliance reports)
    */
-  async queryLogs(startDate: string, endDate: string): Promise<R2Objects | null> {
+  async queryLogs(startDate: string): Promise<R2Objects | null> {
     return await this.bucket.list({
       prefix: `audit-logs/`,
       startAfter: `audit-logs/${startDate}`,

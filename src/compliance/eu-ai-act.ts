@@ -163,7 +163,7 @@ export class EUAIActMonitor {
       .bind('pending', limit)
       .all();
 
-    return result.results as HumanOversightItem[];
+    return result.results as unknown as HumanOversightItem[];
   }
 
   /**
