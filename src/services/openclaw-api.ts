@@ -3,8 +3,6 @@
  * Core task orchestration and execution service
  */
 
-import { retryWithBackoff, DEFAULT_RETRY_CONFIG } from '../utils/failover';
-
 export interface TaskInput {
   type: string;
   parameters: Record<string, any>;
@@ -24,7 +22,7 @@ export interface TaskResult {
  */
 export async function executeTask(
   taskId: string,
-  userId: string,
+  _userId: string,
   input: TaskInput,
   db: D1Database
 ): Promise<TaskResult> {

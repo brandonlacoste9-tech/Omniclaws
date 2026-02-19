@@ -46,8 +46,8 @@ export async function recordPaddleUsage(
     });
     
     if (!response.ok) {
-      const error = await response.text();
-      console.error('Paddle API error:', error);
+      const errorText = await response.text();
+      console.error('Paddle API error:', errorText);
       return {
         success: false,
         provider: 'paddle',
@@ -55,7 +55,7 @@ export async function recordPaddleUsage(
       };
     }
     
-    const result = await response.json();
+    const result = await response.json() as any;
     
     return {
       success: true,
@@ -104,14 +104,14 @@ export async function createPaddleCustomer(
     });
     
     if (!response.ok) {
-      const error = await response.text();
+      await response.text();
       return {
         success: false,
         error: `Failed to create Paddle customer: ${response.status}`,
       };
     }
     
-    const result = await response.json();
+    const result = await response.json() as any;
     
     return {
       success: true,
@@ -129,8 +129,7 @@ export async function createPaddleCustomer(
  * Gets Paddle pricing for display (includes VAT where applicable)
  */
 export async function getPaddlePricing(
-  countryCode: string,
-  apiKey: string // Environment variable: PADDLE_API_KEY
+  countryCode: string
 ): Promise<{
   success: boolean;
   pricePerTask?: number;

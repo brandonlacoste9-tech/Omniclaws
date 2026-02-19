@@ -37,7 +37,7 @@ export function isHighRiskService(service: string): boolean {
 export async function performRiskAssessment(
   taskId: string,
   service: string,
-  input: any,
+  _input: any,
   confidence: number
 ): Promise<RiskAssessment> {
   const riskLevel = isHighRiskService(service) ? 'high' : 'low';

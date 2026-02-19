@@ -37,8 +37,8 @@ export async function recordStripeUsage(
     });
     
     if (!response.ok) {
-      const error = await response.text();
-      console.error('Stripe API error:', error);
+      const errorText = await response.text();
+      console.error('Stripe API error:', errorText);
       return {
         success: false,
         provider: 'stripe',
@@ -46,7 +46,7 @@ export async function recordStripeUsage(
       };
     }
     
-    const result = await response.json();
+    const result = await response.json() as any;
     
     return {
       success: true,
@@ -92,14 +92,14 @@ export async function createStripeCustomer(
     });
     
     if (!response.ok) {
-      const error = await response.text();
+      await response.text();
       return {
         success: false,
         error: `Failed to create Stripe customer: ${response.status}`,
       };
     }
     
-    const result = await response.json();
+    const result = await response.json() as any;
     
     return {
       success: true,
@@ -142,14 +142,14 @@ export async function createUsageSubscription(
     });
     
     if (!response.ok) {
-      const error = await response.text();
+      await response.text();
       return {
         success: false,
         error: `Failed to create subscription: ${response.status}`,
       };
     }
     
-    const result = await response.json();
+    const result = await response.json() as any;
     
     return {
       success: true,

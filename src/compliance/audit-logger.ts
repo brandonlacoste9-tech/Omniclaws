@@ -214,7 +214,7 @@ export async function logHumanReview(
   approved: boolean,
   reviewerNotes: string,
   reviewerEmail: string,
-  request: Request,
+  _request: Request,
   r2: R2Bucket
 ): Promise<void> {
   const log: AuditLog = {

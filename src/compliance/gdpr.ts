@@ -30,7 +30,7 @@ export function isEUCountry(countryCode: string): boolean {
  */
 export function checkDataResidency(
   userCountry: string,
-  processingRegion?: string
+  _processingRegion?: string
 ): DataResidencyCheck {
   const isEU = isEUCountry(userCountry);
   

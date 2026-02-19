@@ -46,10 +46,10 @@ export interface ContentArbitrageResult {
  * Executes content arbitrage workflow
  */
 export async function executeContentArbitrage(
-  taskId: string,
-  userId: string,
+  _taskId: string,
+  _userId: string,
   input: ContentArbitrageInput,
-  db: D1Database
+  _db: D1Database
 ): Promise<ContentArbitrageResult> {
   try {
     // Discover content from sources

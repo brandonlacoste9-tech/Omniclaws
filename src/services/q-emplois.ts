@@ -45,6 +45,8 @@ export interface RecruitmentResult {
   error?: string;
 }
 
+type ScreeningRecommendation = 'hire' | 'interview' | 'reject';
+
 /**
  * Screens candidate for job position
  * This is a HIGH-RISK AI system under EU AI Act Article 6
@@ -84,7 +86,7 @@ export async function screenCandidate(
     );
     
     // If requires human review, override recommendation
-    let finalRecommendation = screeningResult.recommendation;
+    let finalRecommendation: 'hire' | 'interview' | 'reject' | 'human_review_required' = screeningResult.recommendation;
     if (complianceCheck.requiresHumanReview) {
       finalRecommendation = 'human_review_required';
     }
@@ -126,7 +128,7 @@ export async function screenCandidate(
 async function performScreening(input: RecruitmentInput): Promise<{
   score: number;
   confidence: number;
-  recommendation: 'hire' | 'interview' | 'reject';
+  recommendation: ScreeningRecommendation;
   reasoning: string;
   matchedSkills: string[];
   missingSkills: string[];

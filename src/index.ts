@@ -4,7 +4,7 @@
  */
 
 import { getGeoLocation } from './utils/geo-router';
-import { retryWithBackoff, getNextRetryTime, shouldRetry } from './utils/failover';
+import { getNextRetryTime, shouldRetry } from './utils/failover';
 import { recordUsage } from './billing/router';
 import { logTaskExecution, logComplianceCheck } from './compliance/audit-logger';
 import { checkDataResidency } from './compliance/gdpr';
@@ -28,7 +28,7 @@ export interface Env {
  * Main request handler
  */
 export default {
-  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+  async fetch(request: Request, env: Env, _ctx: ExecutionContext): Promise<Response> {
     // Extract geo-location from Cloudflare headers
     const geo = getGeoLocation(request);
     
@@ -92,7 +92,7 @@ export default {
   /**
    * Scheduled handler for failed task reprocessing (runs every 5 minutes)
    */
-  async scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionContext): Promise<void> {
+  async scheduled(_event: ScheduledEvent, env: Env, _ctx: ExecutionContext): Promise<void> {
     console.log('Running scheduled task reprocessing...');
     
     try {
