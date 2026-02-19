@@ -54,6 +54,8 @@ import { getDashboardMetrics, getRealtimeStream, deepHealthCheck } from "./admin
 import { runHealthCheckAndAlert } from "./monitoring/alerter";
 import { getTenant, tenantAllowsFeature } from "./middleware/tenant";
 import { serveLanding } from "./routes/landing";
+import { getAnalytics } from "./analytics/posthog";
+import { getEmailService } from "./email/resend";
 import type { Env, TaskRequest, TaskResult } from "./types";
 
 const ADMIN_CORS_HEADERS: Record<string, string> = {

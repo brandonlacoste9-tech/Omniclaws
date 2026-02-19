@@ -18,6 +18,9 @@ export interface Env {
   DISCORD_WEBHOOK_URL?: string;
   ENVIRONMENT?: string;
   ALCHEMY_API_KEY?: string;
+  POSTHOG_API_KEY?: string;
+  RESEND_API_KEY?: string;
+  EMAIL_DOMAIN?: string;
   BLOCKCHAIR_API_KEY?: string;
   WHALE_API_KEY?: string;
   TASK_PRICE_CENTS: string;
