@@ -13,7 +13,7 @@
  */
 
 import { getCountryFromRequest, getPaymentProvider } from './utils/geo-router';
-import { createCustomer, recordUsage, getBillingSummary, handleWebhook } from './billing/router';
+import { createCustomer, getBillingSummary, handleWebhook } from './billing/router';
 import { processRecruitmentTask, getRecruitmentResult } from './services/q-emplois';
 import { processContentTask, getContentResult } from './services/zyeute-content';
 import { reprocessFailedTasks } from './services/openclaw-api';
@@ -38,7 +38,7 @@ export interface Env {
  * Main Worker request handler
  */
 export default {
-  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+  async fetch(request: Request, env: Env, _ctx: ExecutionContext): Promise<Response> {
     // Add CORS headers
     const corsHeaders = {
       'Access-Control-Allow-Origin': '*',
@@ -117,7 +117,7 @@ export default {
    * Scheduled handler for cron triggers
    * Runs every 5 minutes to reprocess failed tasks
    */
-  async scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionContext): Promise<void> {
+  async scheduled(_event: ScheduledEvent, env: Env, _ctx: ExecutionContext): Promise<void> {
     try {
       const reprocessed = await reprocessFailedTasks(env);
       console.log(`Cron: Reprocessed ${reprocessed} failed tasks`);
@@ -130,7 +130,7 @@ export default {
 /**
  * Health check endpoint
  */
-async function handleHealthCheck(env: Env, corsHeaders: Record<string, string>): Promise<Response> {
+async function handleHealthCheck(_env: Env, corsHeaders: Record<string, string>): Promise<Response> {
   const health = {
     status: 'healthy',
     timestamp: new Date().toISOString(),
@@ -202,7 +202,12 @@ async function handleRecruitment(request: Request, env: Env, corsHeaders: Record
     return new Response('Invalid API key', { status: 401, headers: corsHeaders });
   }
   
-  const body = await request.json();
+  const body = await request.json() as {
+    jobDescription: string;
+    candidateProfile: Record<string, unknown>;
+    evaluationCriteria: string[];
+    position: string;
+  };
   const result = await processRecruitmentTask(env, user.id as string, body, request);
   
   return new Response(JSON.stringify(result), {
@@ -260,7 +265,15 @@ async function handleContent(request: Request, env: Env, corsHeaders: Record<str
     return new Response('Invalid API key', { status: 401, headers: corsHeaders });
   }
   
-  const body = await request.json();
+  const body = await request.json() as {
+    keywords: string[];
+    sources: string[];
+    filters?: {
+      minQuality?: number;
+      language?: string;
+      dateRange?: { start: string; end: string };
+    };
+  };
   const result = await processContentTask(env, user.id as string, body, request);
   
   return new Response(JSON.stringify(result), {

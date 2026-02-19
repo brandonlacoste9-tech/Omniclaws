@@ -4,7 +4,7 @@
  * Stripe for US/CA (direct billing)
  */
 
-import { getPaymentProvider, getCountryFromRequest, type PaymentProvider } from '../utils/geo-router';
+import { getPaymentProvider, type PaymentProvider } from '../utils/geo-router';
 import { createPaddleCustomer, recordPaddleUsage } from './paddle';
 import { createStripeCustomer, recordStripeUsage } from './stripe';
 import type { UsageCharge } from './paddle';

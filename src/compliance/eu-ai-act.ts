@@ -124,14 +124,14 @@ export async function assessAIRisk(
 /**
  * Determines risk level based on service type and payload
  */
-function determineRiskLevel(serviceType: string, payload: Record<string, unknown>): RiskLevel {
+function determineRiskLevel(serviceType: string, _payload: Record<string, unknown>): RiskLevel {
   if (isHighRiskAI(serviceType)) {
     return 'high';
   }
   
   // Check for sensitive data in payload
   const sensitiveFields = ['personalData', 'biometricData', 'healthData'];
-  const hasSensitiveData = sensitiveFields.some(field => field in payload);
+  const hasSensitiveData = sensitiveFields.some(field => field in _payload);
   
   if (hasSensitiveData) {
     return 'medium';
@@ -192,7 +192,7 @@ function generateRationale(
   riskLevel: RiskLevel,
   confidenceScore: number,
   requiresHumanReview: boolean,
-  payload: Record<string, unknown>
+  _payload: Record<string, unknown>
 ): string {
   const parts: string[] = [];
   

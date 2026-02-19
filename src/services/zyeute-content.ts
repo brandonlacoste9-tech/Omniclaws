@@ -68,7 +68,7 @@ export async function processContentTask(
     env,
     task.id,
     async (payload) => {
-      return await performContentDiscovery(payload as ContentRequest);
+      return await performContentDiscovery(payload as unknown as ContentRequest);
     },
     httpRequest
   );
@@ -129,8 +129,8 @@ async function performContentDiscovery(
   // Apply filters
   let filteredItems = items;
   
-  if (request.filters?.minQuality) {
-    filteredItems = filteredItems.filter(item => item.score >= request.filters.minQuality!);
+  if (request.filters?.minQuality !== undefined) {
+    filteredItems = filteredItems.filter(item => item.score >= request.filters!.minQuality!);
   }
   
   return {
@@ -177,10 +177,10 @@ export async function getContentResult(
  * Sets up automated content discovery on a schedule
  */
 export async function scheduleContentMonitoring(
-  env: ZyeuteEnv,
-  userId: string,
-  request: ContentRequest,
-  frequency: 'hourly' | 'daily' | 'weekly'
+  _env: ZyeuteEnv,
+  _userId: string,
+  _request: ContentRequest,
+  _frequency: 'hourly' | 'daily' | 'weekly'
 ): Promise<{ scheduleId: string }> {
   const scheduleId = crypto.randomUUID();
   

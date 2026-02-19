@@ -86,7 +86,7 @@ export async function processRecruitmentTask(
     env,
     task.id,
     async (payload) => {
-      return await performRecruitmentAnalysis(payload as RecruitmentRequest);
+      return await performRecruitmentAnalysis(payload as unknown as RecruitmentRequest);
     },
     httpRequest
   );
@@ -118,7 +118,7 @@ export async function processRecruitmentTask(
  * In production, this would call an ML model
  */
 async function performRecruitmentAnalysis(
-  request: RecruitmentRequest
+  _request: RecruitmentRequest
 ): Promise<Record<string, unknown>> {
   // Simulated AI analysis
   // In production, this would call actual ML models for:
@@ -183,7 +183,7 @@ export async function getRecruitmentResult(
       env,
       taskId,
       async (payload) => {
-        return await performRecruitmentAnalysis(payload as RecruitmentRequest);
+        return await performRecruitmentAnalysis(payload as unknown as RecruitmentRequest);
       }
     );
     

@@ -12,7 +12,7 @@ export interface GDPREnv {
 /**
  * Validates if data processing is allowed for a country
  */
-export function canProcessData(countryCode: string, dataType: 'personal' | 'anonymous'): boolean {
+export function canProcessData(_countryCode: string, dataType: 'personal' | 'anonymous'): boolean {
   // All countries can process anonymous data
   if (dataType === 'anonymous') {
     return true;
@@ -131,8 +131,8 @@ export async function exportUserData(
 export async function recordConsent(
   db: D1Database,
   userId: string,
-  consentType: string,
-  granted: boolean
+  _consentType: string,
+  _granted: boolean
 ): Promise<void> {
   // In production, create a consents table
   // For now, store in user metadata
@@ -149,7 +149,7 @@ export async function recordConsent(
 export async function hasConsent(
   db: D1Database,
   userId: string,
-  consentType: string
+  _consentType: string
 ): Promise<boolean> {
   // Simplified - in production, check consents table
   const user = await db.prepare('SELECT * FROM users WHERE id = ?').bind(userId).first();
