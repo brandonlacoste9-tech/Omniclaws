@@ -1,0 +1,29 @@
+{
+  "name": "omniclaws",
+  "version": "1.0.0",
+  "description": "Global edge-based AI monetization platform running on Cloudflare Workers",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "vitest",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "cloudflare-workers",
+    "edge-computing",
+    "ai-monetization",
+    "compliance",
+    "billing"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240208.0",
+    "@types/node": "^20.11.17",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.2",
+    "wrangler": "^3.28.2"
+  },
+  "dependencies": {}
+}
