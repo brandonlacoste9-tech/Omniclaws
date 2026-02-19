@@ -1,0 +1,28 @@
+name = "omniclaws"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+# D1 Database for task queues and user management
+# IMPORTANT: Replace 'your-database-id-here' with your actual database ID
+# Run: wrangler d1 create omniclaws_db
+# Then update the database_id below with the ID from the output
+[[d1_databases]]
+binding = "DB"
+database_name = "omniclaws_db"
+database_id = "your-database-id-here"
+
+# R2 Storage for compliance audit logs (append-only)
+[[r2_buckets]]
+binding = "AUDIT_LOGS"
+bucket_name = "omniclaws-audit-logs"
+
+# Environment variables (configure via dashboard or CLI)
+# Required: PADDLE_API_KEY, STRIPE_SECRET_KEY, NEVERMINED_API_KEY
+
+[build]
+command = ""
+
+# Cron triggers for failed task reprocessing
+[triggers]
+crons = ["*/5 * * * *"]
