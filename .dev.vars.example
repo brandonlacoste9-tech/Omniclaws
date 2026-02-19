@@ -1,0 +1,17 @@
+# Copy to .dev.vars for local development
+# NEVER commit .dev.vars - it contains secrets
+# Production: use wrangler secret put <NAME>
+
+PADDLE_API_KEY=your_paddle_api_key
+STRIPE_SECRET_KEY=sk_test_your_stripe_key
+OPENCLAW_API_KEY=your_openclaw_api_key
+ZYEUTE_API_KEY=your_zyeute_admin_key
+
+# Admin dashboard & monitoring
+ADMIN_API_KEY=generate_strong_random_string_here
+DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/...
+ENVIRONMENT=staging
+
+# WhaleWatcher (blockchain monitoring)
+ALCHEMY_API_KEY=your_alchemy_key_for_live_data
+WHALE_API_KEY=optional_for_subscribe_auth
