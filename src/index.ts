@@ -272,6 +272,11 @@ export default {
     if (url.pathname === "/admin/billing-status" && request.method === "GET") {
       return handleAdminBillingStatusRoute(request, env);
     }
+
+    // Admin: Test email flows
+    if (url.pathname === "/admin/test-email" && request.method === "POST") {
+      return handleTestEmailRoute(request, env);
+    }
     if (url.pathname === "/billing/flush" && request.method === "POST") {
       return handleBillingFlushRoute(request, env);
     }
@@ -1488,6 +1493,71 @@ async function reprocessFailedTasks(env: Env): Promise<void> {
         `UPDATE failed_tasks SET retry_count = retry_count + 1, last_retry_at = datetime('now') WHERE id = ?`
       ).bind(task.id).run();
     }
+  }
+}
+
+// Admin: Test email handler
+async function handleTestEmailRoute(request: Request, env: Env): Promise<Response> {
+  const authError = requireAdminAuth(request, env);
+  if (authError) return authError;
+
+  try {
+    const body = await request.json() as { type: string; email: string };
+    const { type, email } = body;
+
+    if (!type || !email) {
+      return jsonResponse({ error: "Missing type or email" }, 400);
+    }
+
+    const { getEmailService } = await import("./email/resend");
+    const emailService = getEmailService(env);
+
+    let result;
+    switch (type) {
+      case "welcome":
+        result = await emailService.sendWelcomeEmail(email, {
+          userId: "test-user-123",
+          freeTasks: 50,
+          signupDate: new Date().toISOString(),
+        });
+        break;
+      case "low-credits":
+        result = await emailService.sendLowCreditsEmail(email, {
+          userId: "test-user-123",
+          remaining: 8,
+          used: 42,
+          total: 50,
+        });
+        break;
+      case "weekly":
+        result = await emailService.sendWeeklyReport(email, {
+          userId: "test-user-123",
+          weekStart: "2024-02-12",
+          tasksExecuted: 127,
+          creditsSpent: 6.35,
+          topServices: [
+            { service: "q-emplois", count: 89 },
+            { service: "zyeute-content", count: 38 },
+          ],
+          remainingCredits: 43,
+        });
+        break;
+      default:
+        return jsonResponse({ error: "Unknown email type. Use: welcome, low-credits, weekly" }, 400);
+    }
+
+    if (result.error) {
+      return jsonResponse({ error: "Email failed", details: result.error }, 500);
+    }
+
+    return jsonResponse({
+      success: true,
+      type,
+      email,
+      messageId: result.id,
+    });
+  } catch (err) {
+    return jsonResponse({ error: "Invalid JSON", details: String(err) }, 400);
   }
 }
 
