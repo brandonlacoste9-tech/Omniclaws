@@ -1,0 +1,29 @@
+name = "omniclaws"
+main = "src/index.ts"
+compatibility_date = "2024-02-19"
+compatibility_flags = ["nodejs_compat"]
+
+# Environment variables (set via wrangler secret put)
+# PADDLE_API_KEY - Paddle API key for EU/UK billing
+# STRIPE_SECRET_KEY - Stripe secret key for US/CA billing
+# OPENAI_API_KEY - Optional OpenAI API key for AI services
+
+# D1 Database binding for task queues and user data
+[[d1_databases]]
+binding = "DB"
+database_name = "omniclaws-db"
+database_id = "placeholder-database-id"
+
+# R2 bucket binding for audit logs
+[[r2_buckets]]
+binding = "AUDIT_LOGS"
+bucket_name = "omniclaws-audit-logs"
+
+# Cron triggers for failed task reprocessing (every 5 minutes)
+[triggers]
+crons = ["*/5 * * * *"]
+
+# KV namespace for caching (optional)
+[[kv_namespaces]]
+binding = "CACHE"
+id = "placeholder-kv-id"
