@@ -10,9 +10,10 @@ export function serveLanding(tenant: Tenant, baseUrl: string, ref?: string | nul
   const pricePerTask = (1.0 * tenant.pricing_multiplier).toFixed(2);
   const starterPrice = (5 * tenant.pricing_multiplier).toFixed(2);
 
+  const apiBase = (env?.PUBLIC_API_URL || baseUrl).replace(/\/$/, "");
   const refParam = ref ? `&ref=${encodeURIComponent(ref)}` : "";
-  const creditsUrl = `${baseUrl}/openclaw/credits?userId=demo${refParam}`;
-  const executeUrl = ref ? `${baseUrl}/openclaw/execute?ref=${encodeURIComponent(ref)}` : `${baseUrl}/openclaw/execute`;
+  const creditsUrl = `${apiBase}/openclaw/credits?userId=demo${refParam}`;
+  const executeUrl = ref ? `${apiBase}/openclaw/execute?ref=${encodeURIComponent(ref)}` : `${apiBase}/openclaw/execute`;
 
   const redditPixelId = env?.REDDIT_PIXEL_ID;
   const metaPixelId = env?.META_PIXEL_ID;
@@ -79,7 +80,7 @@ export function serveLanding(tenant: Tenant, baseUrl: string, ref?: string | nul
   <details class="api">
     <summary>API endpoints</summary>
     <code>POST ${executeUrl}</code>
-    <code style="margin-top: 0.25rem;">GET ${baseUrl}/openclaw/credits</code>
+    <code style="margin-top: 0.25rem;">GET ${apiBase}/openclaw/credits</code>
   </details>
   <footer>
     <p><a href="mailto:${escapeHtml(tenant.support_email || "info@adgenxai.pro")}">${escapeHtml(tenant.support_email || "info@adgenxai.pro")}</a> · <a href="mailto:${escapeHtml(tenant.support_email || "info@adgenxai.pro")}?subject=Agency%20plan">Contact sales</a></p>

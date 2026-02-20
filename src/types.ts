@@ -21,6 +21,12 @@ export interface Env {
   POSTHOG_API_KEY?: string;
   RESEND_API_KEY?: string;
   EMAIL_DOMAIN?: string;
+  REPLY_TO_EMAIL?: string;
+  REDDIT_PIXEL_ID?: string;
+  META_PIXEL_ID?: string;
+  TWITTER_PIXEL_ID?: string;
+  GOOGLE_ADS_ID?: string;
+  PUBLIC_API_URL?: string;
   BLOCKCHAIR_API_KEY?: string;
   WHALE_API_KEY?: string;
   TASK_PRICE_CENTS: string;
