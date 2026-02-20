@@ -84,7 +84,7 @@ export function serveLanding(tenant: Tenant, baseUrl: string, ref?: string | nul
     <strong>Pricing</strong> · $${pricePerTask} per task · Starter pack: $${starterPrice} (5 credits)
   </div>
   <a href="${creditsUrl}" class="cta">Get started free</a>
-  <p class="cta-note">No credit card required. Upgrade when you need more.</p>
+  <p class="cta-note">No credit card required. <a href="${apiBase}/billing/buy?pack=starter&userId=demo${refParam}" style="color: var(--brand); font-weight: 500;">Buy credits</a> when you need more.</p>
   <details class="api">
     <summary>API endpoints</summary>
     <code>POST ${executeUrl}</code>

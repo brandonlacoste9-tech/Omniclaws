@@ -174,6 +174,13 @@ export default {
       }
       return handlePurchaseCreditsRoute(request, env);
     }
+    // Buy credits (GET) - redirects to Stripe Checkout
+    if (url.pathname === "/billing/buy" && request.method === "GET") {
+      if (!tenantAllowsFeature(tenant, "openclaw")) {
+        return Response.redirect(url.origin + "/?error=unavailable", 302);
+      }
+      return handleBuyCreditsRedirect(request, env);
+    }
 
     // OpenClaw task status
     const statusMatch = url.pathname.match(/^\/openclaw\/status\/([^/]+)$/);
@@ -625,6 +632,35 @@ async function handleOpenClawExecuteUnifiedRoute(
       : { success: false, taskId: result.taskId, error: result.error },
     result.success ? 200 : 500
   );
+}
+
+async function handleBuyCreditsRedirect(request: Request, env: Env): Promise<Response> {
+  const url = new URL(request.url);
+  const pack = (url.searchParams.get("pack") ?? "starter") as "starter" | "pro" | "whale";
+  const userId = url.searchParams.get("userId") ?? "demo";
+  const ref = url.searchParams.get("ref") ?? undefined;
+
+  if (!["starter", "pro", "whale"].includes(pack)) {
+    return Response.redirect(url.origin + "/?error=invalid_pack", 302);
+  }
+
+  const baseUrl = url.origin;
+  const multiplier = env.TENANT?.pricing_multiplier ?? 1.0;
+  const result = await createCreditPackCheckoutSession(
+    userId,
+    pack,
+    env.DB,
+    env,
+    baseUrl,
+    multiplier,
+    ref
+  );
+
+  if (!result.success || !result.checkoutUrl) {
+    return Response.redirect(url.origin + "/?error=checkout_failed", 302);
+  }
+
+  return Response.redirect(result.checkoutUrl, 302);
 }
 
 async function handlePurchaseCreditsRoute(request: Request, env: Env): Promise<Response> {

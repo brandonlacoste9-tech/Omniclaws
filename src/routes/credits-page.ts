@@ -40,7 +40,7 @@ export function serveCreditsPage(
     .balance-row span { color: var(--text-muted); }
     .cta { display: inline-block; background: linear-gradient(135deg, var(--brand) 0%, var(--brand-accent) 100%); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9375rem; margin-top: 0.5rem; }
     .cta:hover { opacity: 0.9; }
-    .back { font-size: 0.875rem; margin-top: 1.5rem; }
+    .back { font-size: 0.875rem; margin-top: 1rem; }
     .back a { color: var(--brand); text-decoration: none; }
     .back a:hover { text-decoration: underline; }
   </style>
@@ -53,7 +53,8 @@ export function serveCreditsPage(
     <div class="balance-row"><strong>Pro credits</strong><span>${balance.creditBalance}</span></div>
   </div>
   <p style="font-size: 0.875rem; color: var(--text-muted);">Use the API to run tasks. Free tier: 50 tasks/day. Pro: 1 credit per task.</p>
-  <a href="${apiBase}/" class="cta">Back to home</a>
+  <a href="${apiBase}/billing/buy?pack=starter&userId=${encodeURIComponent(userId)}" class="cta">Buy credits ($5 starter)</a>
+  <p class="back"><a href="${apiBase}/">← Back to home</a></p>
 </body>
 </html>`;
 
