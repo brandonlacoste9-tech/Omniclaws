@@ -39,31 +39,39 @@ export function serveLanding(tenant: Tenant, baseUrl: string, ref?: string | nul
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
   ${trackingScripts}
   <style>
-    :root { --brand: ${tenant.brand_color}; --brand-accent: #3b82f6; --text: #1e293b; --text-muted: #64748b; --bg-muted: #f8fafc; --border: #e2e8f0; }
+    :root { --brand: ${tenant.brand_color}; --brand-dark: #1e293b; --brand-accent: #ea580c; --text: #1e293b; --text-muted: #64748b; --bg-muted: #fffbeb; --border: #fde68a; }
     * { box-sizing: border-box; }
-    body { font-family: 'DM Sans', system-ui, sans-serif; max-width: 640px; margin: 0 auto; padding: 48px 24px 64px; line-height: 1.6; color: var(--text); }
-    .logo { font-weight: 700; font-size: 1rem; letter-spacing: -0.02em; color: var(--brand); margin-bottom: 2.5rem; }
-    h1 { font-size: 1.75rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.3; margin-bottom: 0.75rem; color: var(--brand); }
+    body { font-family: 'DM Sans', system-ui, sans-serif; max-width: 640px; margin: 0 auto; padding: 0 24px 64px; line-height: 1.6; color: var(--text); }
+    .men-working { background: linear-gradient(90deg, #fef3c7 0%, #fde68a 50%, #fef3c7 100%); border-bottom: 3px solid var(--brand); padding: 0.5rem 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-size: 0.8125rem; font-weight: 600; color: var(--brand-dark); }
+    .men-working-icon { font-size: 1.25rem; line-height: 1; }
+    .logo { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1.125rem; letter-spacing: -0.02em; color: var(--brand-dark); margin: 2.5rem 0; }
+    .logo-mark { width: 28px; height: 28px; background: linear-gradient(135deg, var(--brand) 0%, var(--brand-accent) 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+    .logo-mark svg { width: 16px; height: 16px; opacity: 0.95; }
+    h1 { font-size: 1.75rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.3; margin-bottom: 0.75rem; color: var(--brand-dark); }
     .subhead { color: var(--text-muted); font-size: 1rem; margin-bottom: 2rem; }
     .features { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; font-size: 0.875rem; color: var(--text-muted); }
     .features span { display: flex; align-items: center; gap: 0.35rem; }
     .features span::before { content: "✓"; color: #22c55e; font-weight: 600; }
     .pricing { background: var(--bg-muted); padding: 1.25rem 1.5rem; border-radius: 10px; margin-bottom: 1.5rem; font-size: 0.9375rem; border: 1px solid var(--border); }
     .pricing strong { color: var(--text); }
-    .cta { display: inline-block; background: var(--brand); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9375rem; transition: opacity 0.15s; }
+    .cta { display: inline-block; background: linear-gradient(135deg, var(--brand) 0%, var(--brand-accent) 100%); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9375rem; transition: opacity 0.15s; }
     .cta:hover { opacity: 0.9; }
     .cta-note { font-size: 0.8125rem; color: var(--text-muted); margin-top: 0.75rem; }
     .api { margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-size: 0.8125rem; color: var(--text-muted); }
     .api summary { cursor: pointer; font-weight: 500; color: var(--text); }
     .api code { display: block; background: var(--bg-muted); padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.75rem; margin-top: 0.5rem; overflow-x: auto; border: 1px solid var(--border); }
     footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-size: 0.8125rem; color: var(--text-muted); }
-    footer a { color: var(--brand-accent); text-decoration: none; }
+    footer a { color: var(--brand); text-decoration: none; }
     footer a:hover { text-decoration: underline; }
     .trust { margin-top: 1rem; font-size: 0.75rem; color: var(--text-muted); opacity: 0.9; }
   </style>
 </head>
 <body>
-  <div class="logo">${escapeHtml(tenant.name)}</div>
+  <div class="men-working"><span class="men-working-icon">🚧</span>Men at work · We're building something great</div>
+  <div class="logo">
+    <div class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div>
+    ${escapeHtml(tenant.name)}
+  </div>
   <h1>${escapeHtml(tenant.headline)}</h1>
   <p class="subhead">${escapeHtml(tenant.subhead)}</p>
   <div class="features">
