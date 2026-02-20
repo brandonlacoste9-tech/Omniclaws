@@ -10,7 +10,7 @@ compatibility_date = "2024-02-19"
 # PUBLIC_API_URL: custom domain for API (e.g. https://api.adgenxai.pro) - hides workers.dev subdomain
 [vars]
 TASK_PRICE_CENTS = "50"
-PUBLIC_API_URL = "https://api.adgenxai.pro"
+PUBLIC_API_URL = "https://www.adgenxai.pro"
 TASK_PRICE_TIER_BASIC = "50"
 TASK_PRICE_TIER_STANDARD = "100"
 TASK_PRICE_TIER_COMPLEX = "200"
