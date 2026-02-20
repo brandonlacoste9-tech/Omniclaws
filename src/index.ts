@@ -54,6 +54,7 @@ import { getDashboardMetrics, getRealtimeStream, deepHealthCheck } from "./admin
 import { runHealthCheckAndAlert } from "./monitoring/alerter";
 import { getTenant, tenantAllowsFeature } from "./middleware/tenant";
 import { serveLanding } from "./routes/landing";
+import { serveCreditsPage } from "./routes/credits-page";
 import { getAnalytics } from "./analytics/posthog";
 import { getEmailService } from "./email/resend";
 import type { Env, TaskRequest, TaskResult } from "./types";
@@ -89,15 +90,26 @@ export default {
 
     // Landing page (GET /)
     if (url.pathname === "/" && request.method === "GET") {
-      const ref = url.searchParams.get("ref");
+      const ref =
+        url.searchParams.get("ref") ??
+        (await import("./marketing/attribution")).synthesizeRefFromUtm(url);
+      const utmSource = url.searchParams.get("utm_source");
+      const utm =
+        utmSource && ref
+          ? {
+              source: utmSource,
+              medium: url.searchParams.get("utm_medium"),
+              campaign: url.searchParams.get("utm_campaign"),
+            }
+          : undefined;
       if (ref) {
         ctx.waitUntil(
           import("./marketing/attribution").then(({ trackClick }) =>
-            trackClick(ref, request, env.DB)
+            trackClick(ref, request, env.DB, undefined, utm)
           )
         );
       }
-      return serveLanding(tenant, url.origin, ref);
+      return serveLanding(tenant, url.origin, ref, env);
     }
 
     // Health check - cache for 60s
@@ -307,9 +319,8 @@ export default {
 
     // Checkout success/cancel pages (redirect targets)
     if (url.pathname === "/billing/success" && request.method === "GET") {
-      return new Response("Payment successful. You can close this window.", {
-        headers: { "Content-Type": "text/plain" },
-      });
+      const { serveBillingSuccess } = await import("./routes/billing-success");
+      return serveBillingSuccess(request, env);
     }
     if (url.pathname === "/billing/cancel" && request.method === "GET") {
       return new Response("Payment cancelled.", {
@@ -537,6 +548,12 @@ async function handleOpenClawCreditsRoute(request: Request, env: Env): Promise<R
   }
 
   const balance = await getCreditBalance(userId, env.DB);
+  const accept = request.headers.get("Accept") ?? "";
+
+  if (accept.includes("text/html")) {
+    return serveCreditsPage(balance, url.origin, userId, env);
+  }
+
   return jsonResponse({
     credits: balance.creditBalance,
     freeTasksUsed: balance.freeTasksUsed,
